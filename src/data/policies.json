@@ -1,0 +1,889 @@
+{
+	"result": [
+		{
+			"id": "main.rego",
+			"raw": "package main\n\nrouter[policy] = data.policies[name][policy].allow\n\nallow[msg] {\n    policy := router[_]\n    msg := policy[_]\n}\n\ndecision[\"allow\"] = count(allow) \u003e 0\ndecision[\"explain\"] = router {\n    input.explain == true\n}\n",
+			"ast": {
+				"package": {
+					"path": [
+						{ "type": "var", "value": "data" },
+						{ "type": "string", "value": "main" }
+					]
+				},
+				"rules": [
+					{
+						"head": {
+							"name": "router",
+							"key": { "type": "var", "value": "policy" },
+							"value": { "type": "var", "value": "__local21__" },
+							"ref": [
+								{ "type": "var", "value": "router" },
+								{ "type": "var", "value": "policy" }
+							]
+						},
+						"body": [
+							{ "terms": { "type": "boolean", "value": true }, "index": 0 },
+							{
+								"terms": [
+									{
+										"type": "ref",
+										"value": [{ "type": "var", "value": "eq" }]
+									},
+									{ "type": "var", "value": "__local21__" },
+									{
+										"type": "ref",
+										"value": [
+											{ "type": "var", "value": "data" },
+											{ "type": "string", "value": "policies" },
+											{ "type": "var", "value": "name" },
+											{ "type": "var", "value": "policy" },
+											{ "type": "string", "value": "allow" }
+										]
+									}
+								],
+								"index": 1,
+								"generated": true
+							}
+						]
+					},
+					{
+						"head": {
+							"name": "allow",
+							"key": { "type": "var", "value": "__local1__" },
+							"ref": [{ "type": "var", "value": "allow" }]
+						},
+						"body": [
+							{
+								"terms": [
+									{
+										"type": "ref",
+										"value": [{ "type": "var", "value": "eq" }]
+									},
+									{ "type": "var", "value": "__local0__" },
+									{
+										"type": "ref",
+										"value": [
+											{ "type": "var", "value": "data" },
+											{ "type": "string", "value": "main" },
+											{ "type": "string", "value": "router" },
+											{ "type": "var", "value": "$0" }
+										]
+									}
+								],
+								"index": 0
+							},
+							{
+								"terms": [
+									{
+										"type": "ref",
+										"value": [{ "type": "var", "value": "eq" }]
+									},
+									{ "type": "var", "value": "__local1__" },
+									{
+										"type": "ref",
+										"value": [
+											{ "type": "var", "value": "__local0__" },
+											{ "type": "var", "value": "$1" }
+										]
+									}
+								],
+								"index": 1
+							}
+						]
+					},
+					{
+						"head": {
+							"name": "decision",
+							"key": { "type": "string", "value": "allow" },
+							"value": { "type": "var", "value": "__local14__" },
+							"ref": [
+								{ "type": "var", "value": "decision" },
+								{ "type": "string", "value": "allow" }
+							]
+						},
+						"body": [
+							{ "terms": { "type": "boolean", "value": true }, "index": 0 },
+							{
+								"terms": [
+									{
+										"type": "ref",
+										"value": [{ "type": "var", "value": "eq" }]
+									},
+									{ "type": "var", "value": "__local23__" },
+									{
+										"type": "ref",
+										"value": [
+											{ "type": "var", "value": "data" },
+											{ "type": "string", "value": "main" },
+											{ "type": "string", "value": "allow" }
+										]
+									}
+								],
+								"index": 1,
+								"generated": true
+							},
+							{
+								"terms": [
+									{
+										"type": "ref",
+										"value": [{ "type": "var", "value": "count" }]
+									},
+									{ "type": "var", "value": "__local23__" },
+									{ "type": "var", "value": "__local13__" }
+								],
+								"index": 2,
+								"generated": true
+							},
+							{
+								"terms": [
+									{
+										"type": "ref",
+										"value": [{ "type": "var", "value": "gt" }]
+									},
+									{ "type": "var", "value": "__local13__" },
+									{ "type": "number", "value": 0 },
+									{ "type": "var", "value": "__local14__" }
+								],
+								"index": 3,
+								"generated": true
+							}
+						]
+					},
+					{
+						"head": {
+							"name": "decision",
+							"key": { "type": "string", "value": "explain" },
+							"value": { "type": "var", "value": "__local22__" },
+							"ref": [
+								{ "type": "var", "value": "decision" },
+								{ "type": "string", "value": "explain" }
+							]
+						},
+						"body": [
+							{
+								"terms": [
+									{
+										"type": "ref",
+										"value": [{ "type": "var", "value": "eq" }]
+									},
+									{
+										"type": "ref",
+										"value": [
+											{ "type": "var", "value": "input" },
+											{ "type": "string", "value": "explain" }
+										]
+									},
+									{ "type": "boolean", "value": true }
+								],
+								"index": 0
+							},
+							{
+								"terms": [
+									{
+										"type": "ref",
+										"value": [{ "type": "var", "value": "eq" }]
+									},
+									{ "type": "var", "value": "__local22__" },
+									{
+										"type": "ref",
+										"value": [
+											{ "type": "var", "value": "data" },
+											{ "type": "string", "value": "main" },
+											{ "type": "string", "value": "router" }
+										]
+									}
+								],
+								"index": 1,
+								"generated": true
+							}
+						]
+					}
+				]
+			}
+		},
+		{
+			"id": "main_test.rego",
+			"raw": "package main_test\nimport future.keywords\nimport data.main\n\ntest_sms_allow {\n    main.decision.allow with input as {\"resource\": \"sms\", \"roles\": [\"fortress\"], \"action\": \"get\"}\n}\n\ntest_sms_deny {\n    not main.decision.allow with input as {\"resource\": \"sms\", \"roles\": [\"district-nine\"], \"action\": \"get\"}\n}",
+			"ast": {
+				"package": {
+					"path": [
+						{ "type": "var", "value": "data" },
+						{ "type": "string", "value": "main_test" }
+					]
+				},
+				"rules": [
+					{
+						"head": {
+							"name": "test_sms_allow",
+							"value": { "type": "boolean", "value": true },
+							"ref": [{ "type": "var", "value": "test_sms_allow" }]
+						},
+						"body": [
+							{
+								"with": [
+									{
+										"target": {
+											"type": "ref",
+											"value": [{ "type": "var", "value": "input" }]
+										},
+										"value": {
+											"type": "object",
+											"value": [
+												[
+													{ "type": "string", "value": "action" },
+													{ "type": "string", "value": "get" }
+												],
+												[
+													{ "type": "string", "value": "resource" },
+													{ "type": "string", "value": "sms" }
+												],
+												[
+													{ "type": "string", "value": "roles" },
+													{
+														"type": "array",
+														"value": [{ "type": "string", "value": "fortress" }]
+													}
+												]
+											]
+										}
+									}
+								],
+								"terms": {
+									"type": "ref",
+									"value": [
+										{ "type": "var", "value": "data" },
+										{ "type": "string", "value": "main" },
+										{ "type": "string", "value": "decision" },
+										{ "type": "string", "value": "allow" }
+									]
+								},
+								"index": 0
+							}
+						]
+					},
+					{
+						"head": {
+							"name": "test_sms_deny",
+							"value": { "type": "boolean", "value": true },
+							"ref": [{ "type": "var", "value": "test_sms_deny" }]
+						},
+						"body": [
+							{
+								"with": [
+									{
+										"target": {
+											"type": "ref",
+											"value": [{ "type": "var", "value": "input" }]
+										},
+										"value": {
+											"type": "object",
+											"value": [
+												[
+													{ "type": "string", "value": "action" },
+													{ "type": "string", "value": "get" }
+												],
+												[
+													{ "type": "string", "value": "resource" },
+													{ "type": "string", "value": "sms" }
+												],
+												[
+													{ "type": "string", "value": "roles" },
+													{
+														"type": "array",
+														"value": [
+															{ "type": "string", "value": "district-nine" }
+														]
+													}
+												]
+											]
+										}
+									}
+								],
+								"terms": {
+									"type": "ref",
+									"value": [
+										{ "type": "var", "value": "data" },
+										{ "type": "string", "value": "main" },
+										{ "type": "string", "value": "decision" },
+										{ "type": "string", "value": "allow" }
+									]
+								},
+								"index": 0,
+								"negated": true
+							}
+						]
+					}
+				]
+			}
+		},
+		{
+			"id": "policies/shared/util.rego",
+			"raw": "package policies.shared.util\nimport future.keywords\n\nis_authenticated(roles) {\n  some input_role in input.roles\n  some role in roles\n  lower(input_role) == lower(role)\n}\n\nis_authorized(privileges) {\n  some privilege in privileges\n  lower(privilege.resource) == lower(input.resource)\n  lower(privilege.action) == lower(input.action)\n}",
+			"ast": {
+				"package": {
+					"path": [
+						{ "type": "var", "value": "data" },
+						{ "type": "string", "value": "policies" },
+						{ "type": "string", "value": "shared" },
+						{ "type": "string", "value": "util" }
+					]
+				},
+				"rules": [
+					{
+						"head": {
+							"name": "is_authenticated",
+							"args": [{ "type": "var", "value": "__local2__" }],
+							"value": { "type": "boolean", "value": true },
+							"ref": [{ "type": "var", "value": "is_authenticated" }]
+						},
+						"body": [
+							{
+								"terms": [
+									{
+										"type": "ref",
+										"value": [{ "type": "var", "value": "eq" }]
+									},
+									{ "type": "var", "value": "__local5__" },
+									{
+										"type": "ref",
+										"value": [
+											{ "type": "var", "value": "input" },
+											{ "type": "string", "value": "roles" },
+											{ "type": "var", "value": "__local4__" }
+										]
+									}
+								],
+								"index": 0
+							},
+							{
+								"terms": [
+									{
+										"type": "ref",
+										"value": [{ "type": "var", "value": "eq" }]
+									},
+									{ "type": "var", "value": "__local8__" },
+									{
+										"type": "ref",
+										"value": [
+											{ "type": "var", "value": "__local2__" },
+											{ "type": "var", "value": "__local7__" }
+										]
+									}
+								],
+								"index": 1
+							},
+							{
+								"terms": [
+									{
+										"type": "ref",
+										"value": [{ "type": "var", "value": "lower" }]
+									},
+									{ "type": "var", "value": "__local5__" },
+									{ "type": "var", "value": "__local15__" }
+								],
+								"index": 2,
+								"generated": true
+							},
+							{
+								"terms": [
+									{
+										"type": "ref",
+										"value": [{ "type": "var", "value": "lower" }]
+									},
+									{ "type": "var", "value": "__local8__" },
+									{ "type": "var", "value": "__local16__" }
+								],
+								"index": 3,
+								"generated": true
+							},
+							{
+								"terms": [
+									{
+										"type": "ref",
+										"value": [{ "type": "var", "value": "eq" }]
+									},
+									{ "type": "var", "value": "__local15__" },
+									{ "type": "var", "value": "__local16__" }
+								],
+								"index": 4
+							}
+						]
+					},
+					{
+						"head": {
+							"name": "is_authorized",
+							"args": [{ "type": "var", "value": "__local9__" }],
+							"value": { "type": "boolean", "value": true },
+							"ref": [{ "type": "var", "value": "is_authorized" }]
+						},
+						"body": [
+							{
+								"terms": [
+									{
+										"type": "ref",
+										"value": [{ "type": "var", "value": "eq" }]
+									},
+									{ "type": "var", "value": "__local12__" },
+									{
+										"type": "ref",
+										"value": [
+											{ "type": "var", "value": "__local9__" },
+											{ "type": "var", "value": "__local11__" }
+										]
+									}
+								],
+								"index": 0
+							},
+							{
+								"terms": [
+									{
+										"type": "ref",
+										"value": [{ "type": "var", "value": "eq" }]
+									},
+									{ "type": "var", "value": "__local24__" },
+									{
+										"type": "ref",
+										"value": [
+											{ "type": "var", "value": "__local12__" },
+											{ "type": "string", "value": "resource" }
+										]
+									}
+								],
+								"index": 1,
+								"generated": true
+							},
+							{
+								"terms": [
+									{
+										"type": "ref",
+										"value": [{ "type": "var", "value": "lower" }]
+									},
+									{ "type": "var", "value": "__local24__" },
+									{ "type": "var", "value": "__local17__" }
+								],
+								"index": 2,
+								"generated": true
+							},
+							{
+								"terms": [
+									{
+										"type": "ref",
+										"value": [{ "type": "var", "value": "eq" }]
+									},
+									{ "type": "var", "value": "__local25__" },
+									{
+										"type": "ref",
+										"value": [
+											{ "type": "var", "value": "input" },
+											{ "type": "string", "value": "resource" }
+										]
+									}
+								],
+								"index": 3,
+								"generated": true
+							},
+							{
+								"terms": [
+									{
+										"type": "ref",
+										"value": [{ "type": "var", "value": "lower" }]
+									},
+									{ "type": "var", "value": "__local25__" },
+									{ "type": "var", "value": "__local18__" }
+								],
+								"index": 4,
+								"generated": true
+							},
+							{
+								"terms": [
+									{
+										"type": "ref",
+										"value": [{ "type": "var", "value": "eq" }]
+									},
+									{ "type": "var", "value": "__local17__" },
+									{ "type": "var", "value": "__local18__" }
+								],
+								"index": 5
+							},
+							{
+								"terms": [
+									{
+										"type": "ref",
+										"value": [{ "type": "var", "value": "eq" }]
+									},
+									{ "type": "var", "value": "__local26__" },
+									{
+										"type": "ref",
+										"value": [
+											{ "type": "var", "value": "__local12__" },
+											{ "type": "string", "value": "action" }
+										]
+									}
+								],
+								"index": 6,
+								"generated": true
+							},
+							{
+								"terms": [
+									{
+										"type": "ref",
+										"value": [{ "type": "var", "value": "lower" }]
+									},
+									{ "type": "var", "value": "__local26__" },
+									{ "type": "var", "value": "__local19__" }
+								],
+								"index": 7,
+								"generated": true
+							},
+							{
+								"terms": [
+									{
+										"type": "ref",
+										"value": [{ "type": "var", "value": "eq" }]
+									},
+									{ "type": "var", "value": "__local27__" },
+									{
+										"type": "ref",
+										"value": [
+											{ "type": "var", "value": "input" },
+											{ "type": "string", "value": "action" }
+										]
+									}
+								],
+								"index": 8,
+								"generated": true
+							},
+							{
+								"terms": [
+									{
+										"type": "ref",
+										"value": [{ "type": "var", "value": "lower" }]
+									},
+									{ "type": "var", "value": "__local27__" },
+									{ "type": "var", "value": "__local20__" }
+								],
+								"index": 9,
+								"generated": true
+							},
+							{
+								"terms": [
+									{
+										"type": "ref",
+										"value": [{ "type": "var", "value": "eq" }]
+									},
+									{ "type": "var", "value": "__local19__" },
+									{ "type": "var", "value": "__local20__" }
+								],
+								"index": 10
+							}
+						]
+					}
+				]
+			}
+		},
+		{
+			"id": "policies/sms/reader.rego",
+			"raw": "package policies.sms.reader\nimport data.policies.shared.util\n\nroles := [\"fortress\", \"knights\"]\nprivileges := [\n  { \"resource\": \"sms\", \"action\": \"get\" }\n]\n\nallow[\"allowed by policies.sms.reader\"] {\n  util.is_authenticated(roles)\n  util.is_authorized(privileges)\n}",
+			"ast": {
+				"package": {
+					"path": [
+						{ "type": "var", "value": "data" },
+						{ "type": "string", "value": "policies" },
+						{ "type": "string", "value": "sms" },
+						{ "type": "string", "value": "reader" }
+					]
+				},
+				"rules": [
+					{
+						"head": {
+							"name": "roles",
+							"value": {
+								"type": "array",
+								"value": [
+									{ "type": "string", "value": "fortress" },
+									{ "type": "string", "value": "knights" }
+								]
+							},
+							"assign": true,
+							"ref": [{ "type": "var", "value": "roles" }]
+						},
+						"body": [
+							{ "terms": { "type": "boolean", "value": true }, "index": 0 }
+						]
+					},
+					{
+						"head": {
+							"name": "privileges",
+							"value": {
+								"type": "array",
+								"value": [
+									{
+										"type": "object",
+										"value": [
+											[
+												{ "type": "string", "value": "action" },
+												{ "type": "string", "value": "get" }
+											],
+											[
+												{ "type": "string", "value": "resource" },
+												{ "type": "string", "value": "sms" }
+											]
+										]
+									}
+								]
+							},
+							"assign": true,
+							"ref": [{ "type": "var", "value": "privileges" }]
+						},
+						"body": [
+							{ "terms": { "type": "boolean", "value": true }, "index": 0 }
+						]
+					},
+					{
+						"head": {
+							"name": "allow",
+							"key": {
+								"type": "string",
+								"value": "allowed by policies.sms.reader"
+							},
+							"ref": [{ "type": "var", "value": "allow" }]
+						},
+						"body": [
+							{
+								"terms": [
+									{
+										"type": "ref",
+										"value": [{ "type": "var", "value": "eq" }]
+									},
+									{ "type": "var", "value": "__local28__" },
+									{
+										"type": "ref",
+										"value": [
+											{ "type": "var", "value": "data" },
+											{ "type": "string", "value": "policies" },
+											{ "type": "string", "value": "sms" },
+											{ "type": "string", "value": "reader" },
+											{ "type": "string", "value": "roles" }
+										]
+									}
+								],
+								"index": 0,
+								"generated": true
+							},
+							{
+								"terms": [
+									{
+										"type": "ref",
+										"value": [
+											{ "type": "var", "value": "data" },
+											{ "type": "string", "value": "policies" },
+											{ "type": "string", "value": "shared" },
+											{ "type": "string", "value": "util" },
+											{ "type": "string", "value": "is_authenticated" }
+										]
+									},
+									{ "type": "var", "value": "__local28__" }
+								],
+								"index": 1
+							},
+							{
+								"terms": [
+									{
+										"type": "ref",
+										"value": [{ "type": "var", "value": "eq" }]
+									},
+									{ "type": "var", "value": "__local29__" },
+									{
+										"type": "ref",
+										"value": [
+											{ "type": "var", "value": "data" },
+											{ "type": "string", "value": "policies" },
+											{ "type": "string", "value": "sms" },
+											{ "type": "string", "value": "reader" },
+											{ "type": "string", "value": "privileges" }
+										]
+									}
+								],
+								"index": 2,
+								"generated": true
+							},
+							{
+								"terms": [
+									{
+										"type": "ref",
+										"value": [
+											{ "type": "var", "value": "data" },
+											{ "type": "string", "value": "policies" },
+											{ "type": "string", "value": "shared" },
+											{ "type": "string", "value": "util" },
+											{ "type": "string", "value": "is_authorized" }
+										]
+									},
+									{ "type": "var", "value": "__local29__" }
+								],
+								"index": 3
+							}
+						]
+					}
+				]
+			}
+		},
+		{
+			"id": "policies/sms/writer.rego",
+			"raw": "package policies.sms.writer\nimport data.policies.shared.util\n\nroles := [\"fortress\"]\nprivileges := [\n  { \"resource\": \"sms\", \"action\": \"get\" },\n  { \"resource\": \"sms\", \"action\": \"post\" }\n]\n\nallow[\"allowed by policies.sms.writer\"] {\n  util.is_authenticated(roles)\n  util.is_authorized(privileges)\n}",
+			"ast": {
+				"package": {
+					"path": [
+						{ "type": "var", "value": "data" },
+						{ "type": "string", "value": "policies" },
+						{ "type": "string", "value": "sms" },
+						{ "type": "string", "value": "writer" }
+					]
+				},
+				"rules": [
+					{
+						"head": {
+							"name": "roles",
+							"value": {
+								"type": "array",
+								"value": [{ "type": "string", "value": "fortress" }]
+							},
+							"assign": true,
+							"ref": [{ "type": "var", "value": "roles" }]
+						},
+						"body": [
+							{ "terms": { "type": "boolean", "value": true }, "index": 0 }
+						]
+					},
+					{
+						"head": {
+							"name": "privileges",
+							"value": {
+								"type": "array",
+								"value": [
+									{
+										"type": "object",
+										"value": [
+											[
+												{ "type": "string", "value": "action" },
+												{ "type": "string", "value": "get" }
+											],
+											[
+												{ "type": "string", "value": "resource" },
+												{ "type": "string", "value": "sms" }
+											]
+										]
+									},
+									{
+										"type": "object",
+										"value": [
+											[
+												{ "type": "string", "value": "action" },
+												{ "type": "string", "value": "post" }
+											],
+											[
+												{ "type": "string", "value": "resource" },
+												{ "type": "string", "value": "sms" }
+											]
+										]
+									}
+								]
+							},
+							"assign": true,
+							"ref": [{ "type": "var", "value": "privileges" }]
+						},
+						"body": [
+							{ "terms": { "type": "boolean", "value": true }, "index": 0 }
+						]
+					},
+					{
+						"head": {
+							"name": "allow",
+							"key": {
+								"type": "string",
+								"value": "allowed by policies.sms.writer"
+							},
+							"ref": [{ "type": "var", "value": "allow" }]
+						},
+						"body": [
+							{
+								"terms": [
+									{
+										"type": "ref",
+										"value": [{ "type": "var", "value": "eq" }]
+									},
+									{ "type": "var", "value": "__local30__" },
+									{
+										"type": "ref",
+										"value": [
+											{ "type": "var", "value": "data" },
+											{ "type": "string", "value": "policies" },
+											{ "type": "string", "value": "sms" },
+											{ "type": "string", "value": "writer" },
+											{ "type": "string", "value": "roles" }
+										]
+									}
+								],
+								"index": 0,
+								"generated": true
+							},
+							{
+								"terms": [
+									{
+										"type": "ref",
+										"value": [
+											{ "type": "var", "value": "data" },
+											{ "type": "string", "value": "policies" },
+											{ "type": "string", "value": "shared" },
+											{ "type": "string", "value": "util" },
+											{ "type": "string", "value": "is_authenticated" }
+										]
+									},
+									{ "type": "var", "value": "__local30__" }
+								],
+								"index": 1
+							},
+							{
+								"terms": [
+									{
+										"type": "ref",
+										"value": [{ "type": "var", "value": "eq" }]
+									},
+									{ "type": "var", "value": "__local31__" },
+									{
+										"type": "ref",
+										"value": [
+											{ "type": "var", "value": "data" },
+											{ "type": "string", "value": "policies" },
+											{ "type": "string", "value": "sms" },
+											{ "type": "string", "value": "writer" },
+											{ "type": "string", "value": "privileges" }
+										]
+									}
+								],
+								"index": 2,
+								"generated": true
+							},
+							{
+								"terms": [
+									{
+										"type": "ref",
+										"value": [
+											{ "type": "var", "value": "data" },
+											{ "type": "string", "value": "policies" },
+											{ "type": "string", "value": "shared" },
+											{ "type": "string", "value": "util" },
+											{ "type": "string", "value": "is_authorized" }
+										]
+									},
+									{ "type": "var", "value": "__local31__" }
+								],
+								"index": 3
+							}
+						]
+					}
+				]
+			}
+		}
+	]
+}

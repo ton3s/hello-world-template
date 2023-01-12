@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import axios from 'axios'
 import {
 	BrowserRouter as Router,
 	Route,
@@ -7,22 +8,41 @@ import {
 } from 'react-router-dom'
 import { Container, Card, ListGroup, ListGroupItem } from 'reactstrap'
 
+// Data
+import samplePolicies from '../data/policies.json'
+
 // Components
-import CandleNavbar from './OPANavbar'
+import OPANavbar from './OPANavbar'
 
 export default function OPAControlPlane() {
-	const [policies, setPolicies] = useState([])
+	const [policies, setPolicies] = useState(
+		samplePolicies.result.map((policy) => ({ id: policy.id, raw: policy.raw }))
+	)
 	const [searchTerm, setSearchTerm] = useState('')
 	const [filteredPolicies, setFilteredPolicies] = useState()
 
+	// Load policies from OPA
 	useEffect(() => {
 		setFilteredPolicies(policies)
 	}, [policies])
 
+	// Needs to go through proxy/api since OPA server does not support CORs
+	// https://github.com/open-policy-agent/opa/issues/2453
+	useEffect(() => {
+		// const loadPolicies = async () => {
+		// 	const response = await axios.get('http://localhost:8181/v1/policies')
+		// 	console.log(response.data)
+		// 	setFilteredPolicies(response.data)
+		// }
+		// loadPolicies()
+	})
+
 	function handleSearch(searchTerm) {
 		if (searchTerm) {
 			const filtered = policies.filter((policy) => {
-				return policy.toLowerCase().includes(searchTerm.toLowerCase())
+				const id = policy.id.toLowerCase().includes(searchTerm.toLowerCase())
+				const raw = policy.raw.toLowerCase().includes(searchTerm.toLowerCase())
+				return id || raw
 			})
 			setFilteredPolicies(filtered)
 		} else {
@@ -33,10 +53,6 @@ export default function OPAControlPlane() {
 	}
 
 	const styles = {
-		section: {
-			padding: '30px 0',
-			height: '100vh',
-		},
 		text: {
 			paddingTop: '20px',
 			paddingBottom: '20px',
@@ -44,21 +60,24 @@ export default function OPAControlPlane() {
 		},
 	}
 
-	const string =
-		'package policies.sms.reader\nimport data.policies.shared.util\n\nroles := ["fortress", "knights"]\nprivileges := [\n  { "resource": "sms", "action": "get" }\n]\n\nallow["allowed by policies.sms.reader"] {\n  util.is_authenticated(roles)\n  util.is_authorized(privileges)\n}'
-	console.log(string)
-
 	return (
 		<Router>
-			<CandleNavbar searchTerm={searchTerm} handleSearch={handleSearch} />
-			<div style={styles.section} className='section-gray' id='cards'>
+			<OPANavbar searchTerm={searchTerm} handleSearch={handleSearch} />
+			<div id='cards'>
 				<Container>
-					<Card className='container justify-content-center animate__animated animate__flipInX'>
-						<ListGroup flush>
-							<ListGroupItem>policies/sms/reader.rego</ListGroupItem>
-							<ListGroupItem style={styles.text}>{string}</ListGroupItem>
-						</ListGroup>
-					</Card>
+					{filteredPolicies &&
+						filteredPolicies.map((policy, index) => (
+							<Card
+								key={index}
+								className='container justify-content-center animate__animated animate__flipInX'>
+								<ListGroup flush>
+									<ListGroupItem>{policy.id}</ListGroupItem>
+									<ListGroupItem style={styles.text}>
+										{policy.raw}
+									</ListGroupItem>
+								</ListGroup>
+							</Card>
+						))}
 				</Container>
 			</div>
 		</Router>

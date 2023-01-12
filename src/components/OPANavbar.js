@@ -42,7 +42,11 @@ export default function OPANavbar({ searchTerm, handleSearch }) {
 
 	return (
 		<>
-			<Navbar color='danger' expand='lg' style={styles.nav}>
+			<Navbar
+				color='danger'
+				expand='lg'
+				className='fixed-top'
+				style={styles.nav}>
 				<Container>
 					<NavbarBrand
 						className='col-md-4 text-center text-md-left animate__animated animate__fadeInDownBig'

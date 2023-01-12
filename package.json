@@ -3,6 +3,7 @@
 	"version": "0.1.0",
 	"private": true,
 	"dependencies": {
+		"axios": "^1.2.2",
 		"classnames": "2.2.6",
 		"headroom.js": "0.11.0",
 		"moment": "2.26.0",
