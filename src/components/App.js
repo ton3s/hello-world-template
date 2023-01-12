@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react'
-import axios from 'axios'
+// import axios from 'axios'
+import { BrowserRouter as Router } from 'react-router-dom'
 import {
-	BrowserRouter as Router,
-	Route,
-	Switch,
-	Redirect,
-} from 'react-router-dom'
-import { Container, Card, ListGroup, ListGroupItem } from 'reactstrap'
+	Container,
+	Card,
+	ListGroup,
+	ListGroupItem,
+	CardLink,
+	Button,
+} from 'reactstrap'
 
 // Data
 import samplePolicies from '../data/policies.json'
@@ -64,6 +66,9 @@ export default function OPAControlPlane() {
 			paddingBottom: '20px',
 			whiteSpace: 'pre-wrap',
 		},
+		button: {
+			fontSize: '20px',
+		},
 	}
 
 	return (
@@ -79,6 +84,12 @@ export default function OPAControlPlane() {
 								<ListGroup flush>
 									<ListGroupItem style={styles.title}>
 										{policy.id}
+										<Button
+											style={styles.button}
+											className='btn-rotate'
+											color='neutral'>
+											<i class='fa fa-pencil-square-o' aria-hidden='true'></i>
+										</Button>
 									</ListGroupItem>
 									<ListGroupItem style={styles.text}>
 										{policy.raw}

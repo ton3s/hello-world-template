@@ -1,16 +1,12 @@
 import React from 'react'
 import { useHistory } from 'react-router-dom'
 import {
-	Button,
 	FormGroup,
 	Form,
 	Input,
 	Container,
-	Nav,
 	NavbarBrand,
 	Navbar,
-	NavItem,
-	NavLink,
 } from 'reactstrap'
 
 const styles = {
@@ -59,7 +55,7 @@ export default function OPANavbar({ searchTerm, handleSearch }) {
 							<Input
 								className='animate__animated animate__flipInX'
 								style={styles.search}
-								placeholder='Search'
+								placeholder='Search Policies'
 								type='text'
 								value={searchTerm}
 								onChange={(e) => handleSearch(e.target.value)}
