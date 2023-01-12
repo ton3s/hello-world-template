@@ -1,14 +1,7 @@
 import React, { useState, useEffect } from 'react'
 // import axios from 'axios'
 import { BrowserRouter as Router } from 'react-router-dom'
-import {
-	Container,
-	Card,
-	ListGroup,
-	ListGroupItem,
-	CardLink,
-	Button,
-} from 'reactstrap'
+import { Container, Card, ListGroup, ListGroupItem, Button } from 'reactstrap'
 
 // Data
 import samplePolicies from '../data/policies.json'
@@ -88,7 +81,9 @@ export default function OPAControlPlane() {
 											style={styles.button}
 											className='btn-rotate'
 											color='neutral'>
-											<i class='fa fa-pencil-square-o' aria-hidden='true'></i>
+											<i
+												className='fa fa-pencil-square-o'
+												aria-hidden='true'></i>
 										</Button>
 									</ListGroupItem>
 									<ListGroupItem style={styles.text}>
