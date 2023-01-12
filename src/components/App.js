@@ -15,8 +15,10 @@ import samplePolicies from '../data/policies.json'
 import OPANavbar from './OPANavbar'
 
 export default function OPAControlPlane() {
-	const [policies, setPolicies] = useState(
-		samplePolicies.result.map((policy) => ({ id: policy.id, raw: policy.raw }))
+	const [policies] = useState(
+		samplePolicies.result
+			.filter((policy) => policy.id.startsWith('policies/'))
+			.map((policy) => ({ id: policy.id, raw: policy.raw }))
 	)
 	const [searchTerm, setSearchTerm] = useState('')
 	const [filteredPolicies, setFilteredPolicies] = useState()
@@ -53,6 +55,10 @@ export default function OPAControlPlane() {
 	}
 
 	const styles = {
+		title: {
+			fontWeight: '500',
+			fontSize: '20px',
+		},
 		text: {
 			paddingTop: '20px',
 			paddingBottom: '20px',
@@ -71,7 +77,9 @@ export default function OPAControlPlane() {
 								key={index}
 								className='container justify-content-center animate__animated animate__flipInX'>
 								<ListGroup flush>
-									<ListGroupItem>{policy.id}</ListGroupItem>
+									<ListGroupItem style={styles.title}>
+										{policy.id}
+									</ListGroupItem>
 									<ListGroupItem style={styles.text}>
 										{policy.raw}
 									</ListGroupItem>
