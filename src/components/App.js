@@ -1,13 +1,39 @@
-import React, { Component } from 'react'
+import React, { useState, useEffect } from 'react'
+import {
+	BrowserRouter as Router,
+	Route,
+	Switch,
+	Redirect,
+} from 'react-router-dom'
 
-class App extends Component {
-	render() {
-		return (
-			<React.Fragment>
-				<h1>Hello World</h1>
-			</React.Fragment>
-		)
+// Components
+import CandleNavbar from './OPANavbar'
+
+export default function OPAControlPlane() {
+	const [policies, setPolicies] = useState([])
+	const [searchTerm, setSearchTerm] = useState('')
+	const [filteredPolicies, setFilteredPolicies] = useState()
+
+	useEffect(() => {
+		setFilteredPolicies(policies)
+	}, [policies])
+
+	function handleSearch(searchTerm) {
+		if (searchTerm) {
+			const filtered = policies.filter((policy) => {
+				return policy.toLowerCase().includes(searchTerm.toLowerCase())
+			})
+			setFilteredPolicies(filtered)
+		} else {
+			// Reset the list if there is no search term
+			setFilteredPolicies(policies)
+		}
+		setSearchTerm(searchTerm)
 	}
-}
 
-export default App
+	return (
+		<Router>
+			<CandleNavbar searchTerm={searchTerm} handleSearch={handleSearch} />
+		</Router>
+	)
+}
