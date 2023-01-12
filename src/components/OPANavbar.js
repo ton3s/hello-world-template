@@ -5,9 +5,12 @@ import {
 	FormGroup,
 	Form,
 	Input,
+	Container,
+	Nav,
 	NavbarBrand,
 	Navbar,
-	Container,
+	NavItem,
+	NavLink,
 } from 'reactstrap'
 
 const styles = {
@@ -42,7 +45,7 @@ export default function OPANavbar({ searchTerm, handleSearch }) {
 			<Navbar color='danger' expand='lg' style={styles.nav}>
 				<Container>
 					<NavbarBrand
-						className='col-md-8 text-center text-md-left animate__animated animate__fadeInDownBig'
+						className='col-md-4 text-center text-md-left animate__animated animate__fadeInDownBig'
 						style={styles.title}
 						onClick={navigateHome}>
 						OPA Control Plane
