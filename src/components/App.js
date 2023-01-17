@@ -34,6 +34,7 @@ export default function OPAControlPlane() {
 		// loadPolicies()
 	})
 
+	// Return a policy object { id, raw, metadata }
 	function getPolicy(policy) {
 		let policyObj = {
 			id: policy.id,
