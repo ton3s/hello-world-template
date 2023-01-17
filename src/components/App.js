@@ -87,13 +87,13 @@ export default function OPAControlPlane() {
 	function displayMetadata(metadata) {
 		if (metadata && metadata.url) {
 			console.log(metadata)
-			displayAlert(metadata.url, 'Success')
+			displayAlert(`${metadata.url}`, 'Prompt', `Edit Policy?`)
 		} else {
 			displayAlert('No metadata associated with this policy!', 'Error')
 		}
 	}
 
-	function displayAlert(message, type) {
+	function displayAlert(message, type, title) {
 		const successTitles = ['Nice!', 'Awesome!', 'Good Job!']
 		let randomSuccessTitle =
 			successTitles[Math.floor(Math.random() * successTitles.length)]
@@ -108,6 +108,23 @@ export default function OPAControlPlane() {
 						onConfirm={() => hideAlert()}
 						onCancel={() => hideAlert()}
 						confirmBtnBsStyle='info'
+						btnSize=''>
+						{message}
+					</ReactBSAlert>
+				)
+				break
+			}
+			case 'Prompt': {
+				setAlert(
+					<ReactBSAlert
+						warning
+						style={{ display: 'block', margin: 'auto' }}
+						title={title}
+						onConfirm={() => hideAlert()}
+						onCancel={() => hideAlert()}
+						confirmBtnBsStyle='info'
+						showCancel
+						cancelBtnBsStyle='danger'
 						btnSize=''>
 						{message}
 					</ReactBSAlert>
