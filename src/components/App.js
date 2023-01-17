@@ -9,6 +9,9 @@ import samplePolicies from '../data/policies.json'
 // Components
 import OPANavbar from './OPANavbar'
 
+// Libraries
+import ReactBSAlert from 'react-bootstrap-sweetalert'
+
 export default function OPAControlPlane() {
 	const [policies] = useState(
 		samplePolicies.result
@@ -17,6 +20,13 @@ export default function OPAControlPlane() {
 	)
 	const [searchTerm, setSearchTerm] = useState('')
 	const [filteredPolicies, setFilteredPolicies] = useState()
+
+	// Utility
+	const [alert, setAlert] = React.useState(null)
+
+	const hideAlert = () => {
+		setAlert(null)
+	}
 
 	// Load policies from OPA
 	useEffect(() => {
@@ -44,7 +54,6 @@ export default function OPAControlPlane() {
 		if (Object.keys(metadata).length) {
 			policyObj.metadata = metadata
 		}
-		console.log(policyObj)
 		return policyObj
 	}
 
@@ -75,6 +84,56 @@ export default function OPAControlPlane() {
 		setSearchTerm(searchTerm)
 	}
 
+	function displayMetadata(metadata) {
+		if (metadata && metadata.url) {
+			console.log(metadata)
+			displayAlert(metadata.url, 'Success')
+		} else {
+			displayAlert('No metadata associated with this policy!', 'Error')
+		}
+	}
+
+	function displayAlert(message, type) {
+		const successTitles = ['Nice!', 'Awesome!', 'Good Job!']
+		let randomSuccessTitle =
+			successTitles[Math.floor(Math.random() * successTitles.length)]
+
+		switch (type) {
+			case 'Success': {
+				setAlert(
+					<ReactBSAlert
+						success
+						style={{ display: 'block', margin: 'auto' }}
+						title={randomSuccessTitle}
+						onConfirm={() => hideAlert()}
+						onCancel={() => hideAlert()}
+						confirmBtnBsStyle='info'
+						btnSize=''>
+						{message}
+					</ReactBSAlert>
+				)
+				break
+			}
+			case 'Error': {
+				setAlert(
+					<ReactBSAlert
+						error
+						style={{ display: 'block', margin: 'auto' }}
+						title='Uh Oh!'
+						onConfirm={() => hideAlert()}
+						onCancel={() => hideAlert()}
+						confirmBtnBsStyle='danger'
+						btnSize=''>
+						{message}
+					</ReactBSAlert>
+				)
+				break
+			}
+			default: {
+			}
+		}
+	}
+
 	const styles = {
 		title: {
 			fontWeight: '500',
@@ -94,7 +153,8 @@ export default function OPAControlPlane() {
 		<Router>
 			<OPANavbar searchTerm={searchTerm} handleSearch={handleSearch} />
 			<div id='cards'>
-				<Container>
+				<Container className='container'>
+					{alert}
 					{filteredPolicies &&
 						filteredPolicies.map((policy, index) => (
 							<Card
@@ -106,7 +166,8 @@ export default function OPAControlPlane() {
 										<Button
 											style={styles.button}
 											className='btn-rotate'
-											color='neutral'>
+											color='neutral'
+											onClick={() => displayMetadata(policy.metadata)}>
 											<i
 												className='fa fa-pencil-square-o'
 												aria-hidden='true'></i>
