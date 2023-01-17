@@ -87,13 +87,20 @@ export default function OPAControlPlane() {
 	function displayMetadata(metadata) {
 		if (metadata && metadata.url) {
 			console.log(metadata)
-			displayAlert(`${metadata.url}`, 'Prompt', `Edit Policy?`)
+			displayAlert(
+				`${metadata.url}`,
+				'Prompt',
+				`Edit Policy?`,
+				() =>
+					window.open(metadata.url, '_blank') ||
+					window.location.replace(metadata.url)
+			)
 		} else {
-			displayAlert('No metadata associated with this policy!', 'Error')
+			displayAlert('No url metadata associated with this policy!', 'Error')
 		}
 	}
 
-	function displayAlert(message, type, title) {
+	function displayAlert(message, type, title, callback) {
 		const successTitles = ['Nice!', 'Awesome!', 'Good Job!']
 		let randomSuccessTitle =
 			successTitles[Math.floor(Math.random() * successTitles.length)]
@@ -120,7 +127,10 @@ export default function OPAControlPlane() {
 						warning
 						style={{ display: 'block', margin: 'auto' }}
 						title={title}
-						onConfirm={() => hideAlert()}
+						onConfirm={() => {
+							if (callback) callback()
+							hideAlert()
+						}}
 						onCancel={() => hideAlert()}
 						confirmBtnBsStyle='info'
 						showCancel
