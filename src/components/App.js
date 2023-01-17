@@ -13,7 +13,11 @@ export default function OPAControlPlane() {
 	const [policies] = useState(
 		samplePolicies.result
 			.filter((policy) => policy.id.startsWith('policies/'))
-			.map((policy) => ({ id: policy.id, raw: policy.raw }))
+			.map((policy) => ({
+				id: policy.id,
+				metadata: getMetadata(policy.raw),
+				raw: policy.raw,
+			}))
 	)
 	const [searchTerm, setSearchTerm] = useState('')
 	const [filteredPolicies, setFilteredPolicies] = useState()
@@ -33,6 +37,21 @@ export default function OPAControlPlane() {
 		// }
 		// loadPolicies()
 	})
+
+	function getMetadata(policy) {
+		const metadataArr = policy
+			.split('\n')
+			.filter((line) => line.trim().startsWith('#'))
+			.map((comment) => comment.substring(1).trim())
+			.map((comment) => comment.split(/:(.*)/s))
+			.filter((words) => words.length > 1)
+			.map((words) => ({ [words[0]]: words[1] }))
+
+		const metadata = Object.assign({}, ...metadataArr)
+		console.log('metadata: ', metadata)
+
+		return metadata || {}
+	}
 
 	function handleSearch(searchTerm) {
 		if (searchTerm) {

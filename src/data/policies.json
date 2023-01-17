@@ -1,207 +1,6 @@
 {
 	"result": [
 		{
-			"id": "main.rego",
-			"raw": "package main\n\nrouter[policy] = data.policies[name][policy].allow\n\nallow[msg] {\n    policy := router[_]\n    msg := policy[_]\n}\n\ndecision[\"allow\"] = count(allow) \u003e 0\ndecision[\"explain\"] = router {\n    input.explain == true\n}\n",
-			"ast": {
-				"package": {
-					"path": [
-						{ "type": "var", "value": "data" },
-						{ "type": "string", "value": "main" }
-					]
-				},
-				"rules": [
-					{
-						"head": {
-							"name": "router",
-							"key": { "type": "var", "value": "policy" },
-							"value": { "type": "var", "value": "__local21__" },
-							"ref": [
-								{ "type": "var", "value": "router" },
-								{ "type": "var", "value": "policy" }
-							]
-						},
-						"body": [
-							{ "terms": { "type": "boolean", "value": true }, "index": 0 },
-							{
-								"terms": [
-									{
-										"type": "ref",
-										"value": [{ "type": "var", "value": "eq" }]
-									},
-									{ "type": "var", "value": "__local21__" },
-									{
-										"type": "ref",
-										"value": [
-											{ "type": "var", "value": "data" },
-											{ "type": "string", "value": "policies" },
-											{ "type": "var", "value": "name" },
-											{ "type": "var", "value": "policy" },
-											{ "type": "string", "value": "allow" }
-										]
-									}
-								],
-								"index": 1,
-								"generated": true
-							}
-						]
-					},
-					{
-						"head": {
-							"name": "allow",
-							"key": { "type": "var", "value": "__local1__" },
-							"ref": [{ "type": "var", "value": "allow" }]
-						},
-						"body": [
-							{
-								"terms": [
-									{
-										"type": "ref",
-										"value": [{ "type": "var", "value": "eq" }]
-									},
-									{ "type": "var", "value": "__local0__" },
-									{
-										"type": "ref",
-										"value": [
-											{ "type": "var", "value": "data" },
-											{ "type": "string", "value": "main" },
-											{ "type": "string", "value": "router" },
-											{ "type": "var", "value": "$0" }
-										]
-									}
-								],
-								"index": 0
-							},
-							{
-								"terms": [
-									{
-										"type": "ref",
-										"value": [{ "type": "var", "value": "eq" }]
-									},
-									{ "type": "var", "value": "__local1__" },
-									{
-										"type": "ref",
-										"value": [
-											{ "type": "var", "value": "__local0__" },
-											{ "type": "var", "value": "$1" }
-										]
-									}
-								],
-								"index": 1
-							}
-						]
-					},
-					{
-						"head": {
-							"name": "decision",
-							"key": { "type": "string", "value": "allow" },
-							"value": { "type": "var", "value": "__local14__" },
-							"ref": [
-								{ "type": "var", "value": "decision" },
-								{ "type": "string", "value": "allow" }
-							]
-						},
-						"body": [
-							{ "terms": { "type": "boolean", "value": true }, "index": 0 },
-							{
-								"terms": [
-									{
-										"type": "ref",
-										"value": [{ "type": "var", "value": "eq" }]
-									},
-									{ "type": "var", "value": "__local23__" },
-									{
-										"type": "ref",
-										"value": [
-											{ "type": "var", "value": "data" },
-											{ "type": "string", "value": "main" },
-											{ "type": "string", "value": "allow" }
-										]
-									}
-								],
-								"index": 1,
-								"generated": true
-							},
-							{
-								"terms": [
-									{
-										"type": "ref",
-										"value": [{ "type": "var", "value": "count" }]
-									},
-									{ "type": "var", "value": "__local23__" },
-									{ "type": "var", "value": "__local13__" }
-								],
-								"index": 2,
-								"generated": true
-							},
-							{
-								"terms": [
-									{
-										"type": "ref",
-										"value": [{ "type": "var", "value": "gt" }]
-									},
-									{ "type": "var", "value": "__local13__" },
-									{ "type": "number", "value": 0 },
-									{ "type": "var", "value": "__local14__" }
-								],
-								"index": 3,
-								"generated": true
-							}
-						]
-					},
-					{
-						"head": {
-							"name": "decision",
-							"key": { "type": "string", "value": "explain" },
-							"value": { "type": "var", "value": "__local22__" },
-							"ref": [
-								{ "type": "var", "value": "decision" },
-								{ "type": "string", "value": "explain" }
-							]
-						},
-						"body": [
-							{
-								"terms": [
-									{
-										"type": "ref",
-										"value": [{ "type": "var", "value": "eq" }]
-									},
-									{
-										"type": "ref",
-										"value": [
-											{ "type": "var", "value": "input" },
-											{ "type": "string", "value": "explain" }
-										]
-									},
-									{ "type": "boolean", "value": true }
-								],
-								"index": 0
-							},
-							{
-								"terms": [
-									{
-										"type": "ref",
-										"value": [{ "type": "var", "value": "eq" }]
-									},
-									{ "type": "var", "value": "__local22__" },
-									{
-										"type": "ref",
-										"value": [
-											{ "type": "var", "value": "data" },
-											{ "type": "string", "value": "main" },
-											{ "type": "string", "value": "router" }
-										]
-									}
-								],
-								"index": 1,
-								"generated": true
-							}
-						]
-					}
-				]
-			}
-		},
-		{
 			"id": "main_test.rego",
 			"raw": "package main_test\nimport future.keywords\nimport data.main\n\ntest_sms_allow {\n    main.decision.allow with input as {\"resource\": \"sms\", \"roles\": [\"fortress\"], \"action\": \"get\"}\n}\n\ntest_sms_deny {\n    not main.decision.allow with input as {\"resource\": \"sms\", \"roles\": [\"district-nine\"], \"action\": \"get\"}\n}",
 			"ast": {
@@ -583,7 +382,7 @@
 		},
 		{
 			"id": "policies/sms/reader.rego",
-			"raw": "package policies.sms.reader\nimport data.policies.shared.util\n\nroles := [\"fortress\", \"knights\"]\nprivileges := [\n  { \"resource\": \"sms\", \"action\": \"get\" }\n]\n\nallow[\"allowed by policies.sms.reader\"] {\n  util.is_authenticated(roles)\n  util.is_authorized(privileges)\n}",
+			"raw": "# METADATA\n# team: ton3s\n# url: https://github.com/ton3s/hello-world-template\n\npackage policies.sms.reader\nimport data.policies.shared.util\n\nroles := [\"fortress\", \"knights\"]\nprivileges := [\n  { \"resource\": \"sms\", \"action\": \"get\" }\n]\n\nallow[\"allowed by policies.sms.reader\"] {\n  util.is_authenticated(roles)\n  util.is_authorized(privileges)\n}",
 			"ast": {
 				"package": {
 					"path": [
@@ -724,6 +523,32 @@
 								"index": 3
 							}
 						]
+					}
+				],
+				"comments": [
+					{
+						"Text": "IE1FVEFEQVRB",
+						"Location": {
+							"file": "policies/sms/reader.rego",
+							"row": 1,
+							"col": 1
+						}
+					},
+					{
+						"Text": "IHRlYW06IHRvbjNz",
+						"Location": {
+							"file": "policies/sms/reader.rego",
+							"row": 2,
+							"col": 1
+						}
+					},
+					{
+						"Text": "IHVybDogaHR0cHM6Ly9naXRodWIuY29tL3RvbjNzL2hlbGxvLXdvcmxkLXRlbXBsYXRl",
+						"Location": {
+							"file": "policies/sms/reader.rego",
+							"row": 3,
+							"col": 1
+						}
 					}
 				]
 			}
@@ -879,6 +704,207 @@
 									{ "type": "var", "value": "__local31__" }
 								],
 								"index": 3
+							}
+						]
+					}
+				]
+			}
+		},
+		{
+			"id": "main.rego",
+			"raw": "package main\n\nrouter[policy] = data.policies[name][policy].allow\n\nallow[msg] {\n    policy := router[_]\n    msg := policy[_]\n}\n\ndecision[\"allow\"] = count(allow) \u003e 0\ndecision[\"explain\"] = router {\n    input.explain == true\n}\n",
+			"ast": {
+				"package": {
+					"path": [
+						{ "type": "var", "value": "data" },
+						{ "type": "string", "value": "main" }
+					]
+				},
+				"rules": [
+					{
+						"head": {
+							"name": "router",
+							"key": { "type": "var", "value": "policy" },
+							"value": { "type": "var", "value": "__local21__" },
+							"ref": [
+								{ "type": "var", "value": "router" },
+								{ "type": "var", "value": "policy" }
+							]
+						},
+						"body": [
+							{ "terms": { "type": "boolean", "value": true }, "index": 0 },
+							{
+								"terms": [
+									{
+										"type": "ref",
+										"value": [{ "type": "var", "value": "eq" }]
+									},
+									{ "type": "var", "value": "__local21__" },
+									{
+										"type": "ref",
+										"value": [
+											{ "type": "var", "value": "data" },
+											{ "type": "string", "value": "policies" },
+											{ "type": "var", "value": "name" },
+											{ "type": "var", "value": "policy" },
+											{ "type": "string", "value": "allow" }
+										]
+									}
+								],
+								"index": 1,
+								"generated": true
+							}
+						]
+					},
+					{
+						"head": {
+							"name": "allow",
+							"key": { "type": "var", "value": "__local1__" },
+							"ref": [{ "type": "var", "value": "allow" }]
+						},
+						"body": [
+							{
+								"terms": [
+									{
+										"type": "ref",
+										"value": [{ "type": "var", "value": "eq" }]
+									},
+									{ "type": "var", "value": "__local0__" },
+									{
+										"type": "ref",
+										"value": [
+											{ "type": "var", "value": "data" },
+											{ "type": "string", "value": "main" },
+											{ "type": "string", "value": "router" },
+											{ "type": "var", "value": "$0" }
+										]
+									}
+								],
+								"index": 0
+							},
+							{
+								"terms": [
+									{
+										"type": "ref",
+										"value": [{ "type": "var", "value": "eq" }]
+									},
+									{ "type": "var", "value": "__local1__" },
+									{
+										"type": "ref",
+										"value": [
+											{ "type": "var", "value": "__local0__" },
+											{ "type": "var", "value": "$1" }
+										]
+									}
+								],
+								"index": 1
+							}
+						]
+					},
+					{
+						"head": {
+							"name": "decision",
+							"key": { "type": "string", "value": "allow" },
+							"value": { "type": "var", "value": "__local14__" },
+							"ref": [
+								{ "type": "var", "value": "decision" },
+								{ "type": "string", "value": "allow" }
+							]
+						},
+						"body": [
+							{ "terms": { "type": "boolean", "value": true }, "index": 0 },
+							{
+								"terms": [
+									{
+										"type": "ref",
+										"value": [{ "type": "var", "value": "eq" }]
+									},
+									{ "type": "var", "value": "__local23__" },
+									{
+										"type": "ref",
+										"value": [
+											{ "type": "var", "value": "data" },
+											{ "type": "string", "value": "main" },
+											{ "type": "string", "value": "allow" }
+										]
+									}
+								],
+								"index": 1,
+								"generated": true
+							},
+							{
+								"terms": [
+									{
+										"type": "ref",
+										"value": [{ "type": "var", "value": "count" }]
+									},
+									{ "type": "var", "value": "__local23__" },
+									{ "type": "var", "value": "__local13__" }
+								],
+								"index": 2,
+								"generated": true
+							},
+							{
+								"terms": [
+									{
+										"type": "ref",
+										"value": [{ "type": "var", "value": "gt" }]
+									},
+									{ "type": "var", "value": "__local13__" },
+									{ "type": "number", "value": 0 },
+									{ "type": "var", "value": "__local14__" }
+								],
+								"index": 3,
+								"generated": true
+							}
+						]
+					},
+					{
+						"head": {
+							"name": "decision",
+							"key": { "type": "string", "value": "explain" },
+							"value": { "type": "var", "value": "__local22__" },
+							"ref": [
+								{ "type": "var", "value": "decision" },
+								{ "type": "string", "value": "explain" }
+							]
+						},
+						"body": [
+							{
+								"terms": [
+									{
+										"type": "ref",
+										"value": [{ "type": "var", "value": "eq" }]
+									},
+									{
+										"type": "ref",
+										"value": [
+											{ "type": "var", "value": "input" },
+											{ "type": "string", "value": "explain" }
+										]
+									},
+									{ "type": "boolean", "value": true }
+								],
+								"index": 0
+							},
+							{
+								"terms": [
+									{
+										"type": "ref",
+										"value": [{ "type": "var", "value": "eq" }]
+									},
+									{ "type": "var", "value": "__local22__" },
+									{
+										"type": "ref",
+										"value": [
+											{ "type": "var", "value": "data" },
+											{ "type": "string", "value": "main" },
+											{ "type": "string", "value": "router" }
+										]
+									}
+								],
+								"index": 1,
+								"generated": true
 							}
 						]
 					}
